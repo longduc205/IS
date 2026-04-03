@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>
+        <span class="gradient-text">Web Security</span><br>
+        Attack Laboratory
+    </h1>
+    <p>
+        Nền tảng mô phỏng các lỗ hổng bảo mật web phổ biến nhất.
+        Học cách tấn công để hiểu cách phòng thủ.
+    </p>
+
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="number">4</div>
+            <div class="label">Attack Types</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">8</div>
+            <div class="label">Demo Labs</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">90%</div>
+            <div class="label">Apps Have Input Vuln</div>
+        </div>
+    </div>
+</section>
+
+<div class="warning-banner">
+    <span class="icon">⚠️</span>
+    <span>
+        <strong>Cảnh báo:</strong> Dự án này chứa code có chủ đích vulnerable. Chỉ sử dụng cho mục đích giáo dục.
+        KHÔNG triển khai trên môi trường production.
+    </span>
+</div>
+
+<h2 class="section-title">🎯 Các loại tấn công</h2>
+
+<div class="attacks-grid">
+    {% for attack in attacks %}
+    <a href="{{ attack.url }}" class="attack-card" style="--card-accent: {{ attack.color }}">
+        <div class="card-header">
+            <span class="card-icon">{{ attack.icon }}</span>
+            <span class="severity-badge severity-{{ 'critical' if attack.severity == 'Critical' else 'high' }}">
+                {{ attack.severity }}
+            </span>
+        </div>
+        <h3>{{ attack.name }}</h3>
+        <p>{{ attack.description }}</p>
+        <div class="card-footer">
+            <span class="card-link">Bắt đầu demo</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="accounts-info">
+    <h4>📋 Tài khoản demo có sẵn</h4>
+    <table>
+        <tr><td>admin / admin123</td><td>— Admin (balance: $5000)</td></tr>
+        <tr><td>alice / alice123</td><td>— User (balance: $1000)</td></tr>
+        <tr><td>bob / bob123</td><td>— User (balance: $2500)</td></tr>
+        <tr><td>charlie / charlie123</td><td>— User (balance: $800)</td></tr>
+    </table>
+</div>
+{% endblock %}

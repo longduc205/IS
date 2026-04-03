@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}SQL Injection - Vulnerable{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>💉 SQL Injection</h1>
+    <p class="subtitle">Chèn mã SQL vào input để thao túng database</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('sqli.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
+    <a href="{{ url_for('sqli.secure') }}" class="tab-link secure">🔒 Secure</a>
+</div>
+
+<div class="warning-banner">
+    <span class="icon">⚠️</span>
+    <span>Endpoint này sử dụng <strong>string concatenation</strong> trực tiếp — dễ bị SQL Injection!</span>
+</div>
+
+<div class="demo-container">
+    <!-- Left: Input & Results -->
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🔍 Tìm kiếm User</span>
+                <span class="vuln-badge">VULNERABLE</span>
+            </div>
+            <div class="panel-body">
+                <form method="GET" action="{{ url_for('sqli.vulnerable') }}">
+                    <div class="form-group">
+                        <label class="form-label" for="search-input">Username</label>
+                        <input type="text" id="search-input" name="search" class="form-input mono"
+                               value="{{ search }}" placeholder="Nhập username hoặc payload...">
+                    </div>
+                    <button type="submit" class="btn btn-danger">💉 Execute Query</button>
+                </form>
+            </div>
+        </div>
+
+        {% if executed_query %}
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Query được thực thi</span>
+                <span>SQL</span>
+            </div>
+            <div class="code-content">
+                <span class="danger">{{ executed_query }}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error_msg %}
+        <div class="warning-banner" style="margin-top: 1rem; background: rgba(255, 71, 87, 0.08);">
+            <span class="icon">❌</span>
+            <span><strong>SQL Error:</strong> {{ error_msg }}</span>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📊 Kết quả ({{ results|length }} rows)</span>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            {% for key in results[0].keys() %}
+                            <th>{{ key }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr>
+                            {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% elif search %}
+        <div class="empty-state" style="margin-top: 1.5rem;">
+            <div class="empty-icon">🔍</div>
+            <p>Không tìm thấy kết quả</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Right: Payloads & Explanation -->
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🎯 Payload gợi ý</span>
+            </div>
+            <div class="panel-body">
+                <div class="payloads-list">
+                    {% for payload in payloads %}
+                    <div class="payload-item" data-payload="{{ payload.value }}" data-target="search-input">
+                        <span class="payload-name">{{ payload.name }}</span>
+                        <span class="payload-value">{{ payload.value }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>📖 Tại sao bị lỗi?</h3>
+            <ul>
+                <li><strong>Nguyên nhân:</strong> Query sử dụng string concatenation <code>f"...'{search}'"</code></li>
+                <li><strong>Input không được validate</strong> → attacker chèn SQL commands</li>
+                <li><strong>Hậu quả:</strong> Đọc, sửa, xóa toàn bộ database</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Vulnerable Code</span>
+                <span>Python</span>
+            </div>
+            <div class="code-content"><span class="comment"># ❌ VULNERABLE: String concatenation</span>
+query = <span class="string">f"SELECT * FROM users WHERE username = '<span class="danger">{search}</span>'"</span>
+cursor.execute(query)</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

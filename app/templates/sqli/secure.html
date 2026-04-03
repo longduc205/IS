@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}SQL Injection - Secure{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>💉 SQL Injection</h1>
+    <p class="subtitle">Phiên bản an toàn sử dụng Parameterized Query</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('sqli.vulnerable') }}" class="tab-link vulnerable">🔓 Vulnerable</a>
+    <a href="{{ url_for('sqli.secure') }}" class="tab-link secure active">🔒 Secure</a>
+</div>
+
+<div class="demo-container">
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🔍 Tìm kiếm User</span>
+                <span class="secure-badge">SECURE ✓</span>
+            </div>
+            <div class="panel-body">
+                <form method="GET" action="{{ url_for('sqli.secure') }}">
+                    <div class="form-group">
+                        <label class="form-label" for="search-input">Username</label>
+                        <input type="text" id="search-input" name="search" class="form-input mono"
+                               value="{{ search }}" placeholder="Thử inject payload ở đây...">
+                    </div>
+                    <button type="submit" class="btn btn-success">🔒 Execute Query</button>
+                </form>
+            </div>
+        </div>
+
+        {% if executed_query %}
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Query được thực thi (escaped)</span>
+                <span>SQL</span>
+            </div>
+            <div class="code-content">{{ executed_query }}</div>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📊 Kết quả ({{ results|length }} rows)</span>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            {% for key in results[0].keys() %}
+                            <th>{{ key }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results %}
+                        <tr>
+                            {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% elif search %}
+        <div class="empty-state" style="margin-top: 1.5rem;">
+            <div class="empty-icon">🛡️</div>
+            <p>Không tìm thấy kết quả — payload đã bị vô hiệu hóa!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🎯 Thử lại các payload</span>
+            </div>
+            <div class="panel-body">
+                <div class="payloads-list">
+                    {% for payload in payloads %}
+                    <div class="payload-item" data-payload="{{ payload.value }}" data-target="search-input">
+                        <span class="payload-name">{{ payload.name }}</span>
+                        <span class="payload-value">{{ payload.value }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>🛡️ Cách phòng chống</h3>
+            <ul>
+                <li><strong>Parameterized Query:</strong> Sử dụng <code>%s</code> placeholder</li>
+                <li><strong>ORM:</strong> SQLAlchemy, Django ORM tự động escape</li>
+                <li><strong>Input Validation:</strong> Whitelist ký tự hợp lệ</li>
+                <li><strong>Least Privilege:</strong> DB user chỉ có quyền cần thiết</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Secure Code</span>
+                <span>Python</span>
+            </div>
+            <div class="code-content"><span class="comment"># ✅ SECURE: Parameterized query</span>
+query = <span class="string">"SELECT * FROM users WHERE username = <span class="keyword">%s</span>"</span>
+cursor.execute(query, <span class="keyword">(search,)</span>)</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

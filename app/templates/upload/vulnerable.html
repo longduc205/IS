@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}File Upload - Vulnerable{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📁 File Upload & IDOR</h1>
+    <p class="subtitle">Upload file không an toàn và truy cập trái phép tài nguyên</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('upload.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
+    <a href="{{ url_for('upload.secure') }}" class="tab-link secure">🔒 Secure</a>
+</div>
+
+<div class="warning-banner">
+    <span class="icon">⚠️</span>
+    <span><strong>Không validate file type, không rename file</strong> — có thể upload bất kỳ file nào!</span>
+</div>
+
+<div class="demo-container">
+    <div>
+        <!-- File Upload -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📤 Upload File</span>
+                <span class="vuln-badge">NO VALIDATION</span>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="{{ url_for('upload.vulnerable') }}" enctype="multipart/form-data">
+                    <div class="upload-zone">
+                        <div class="upload-icon">📂</div>
+                        <div class="upload-text">
+                            Kéo thả file hoặc click để chọn<br>
+                            <small style="color: var(--accent-red);">Chấp nhận MỌI loại file (vulnerable!)</small>
+                        </div>
+                        <input type="file" name="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-block" style="margin-top: 1rem;">📤 Upload (No Validation)</button>
+                </form>
+
+                {% if uploaded_file_url %}
+                <div style="margin-top: 1rem; padding: 0.75rem; background: var(--accent-green-glow); border-radius: var(--radius-sm); font-size: 0.8125rem;">
+                    ✅ File uploaded: <a href="{{ uploaded_file_url }}" target="_blank">{{ uploaded_file_url }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if files %}
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📋 Files đã upload</span>
+            </div>
+            <div class="panel-body">
+                <div class="file-list">
+                    {% for f in files %}
+                    <div class="file-item">
+                        <span class="file-icon">📄</span>
+                        <span>{{ f }}</span>
+                        <a href="{{ url_for('static', filename='uploads/' + f) }}" target="_blank" class="btn btn-outline btn-sm">Xem</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- IDOR Demo -->
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">🔑 IDOR Demo</span>
+                <span class="vuln-badge">NO AUTH CHECK</span>
+            </div>
+            <div class="panel-body">
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                    Thay đổi ID trong URL để xem profile User khác (bao gồm thông tin nhạy cảm!)
+                </p>
+                <div class="idor-nav">
+                    {% for i in range(1, 6) %}
+                    <a href="{{ url_for('upload.vulnerable_profile', user_id=i) }}">User #{{ i }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="explanation">
+            <h3>📖 Tại sao bị lỗi?</h3>
+            <ul>
+                <li><strong>File Upload:</strong> Không validate extension → upload .php, .html, .py</li>
+                <li><strong>Không rename:</strong> Giữ original filename → path traversal</li>
+                <li><strong>Direct access:</strong> File serve trực tiếp qua static URL</li>
+                <li><strong>IDOR:</strong> Không kiểm tra quyền → xem mọi user profile</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Vulnerable Code</span>
+                <span>Python</span>
+            </div>
+            <div class="code-content"><span class="comment"># ❌ File Upload: No validation</span>
+filename = file.filename  <span class="danger"># Original name!</span>
+file.save(os.path.join(upload_dir, filename))
+
+<span class="comment"># ❌ IDOR: No authorization check</span>
+<span class="keyword">@app.route</span>(<span class="string">"/profile/&lt;int:user_id&gt;"</span>)
+<span class="keyword">def</span> profile(user_id):
+    <span class="comment"># Anyone can access any user_id!</span>
+    <span class="keyword">return</span> get_profile(user_id)  <span class="danger"># No auth check</span></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

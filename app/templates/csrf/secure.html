@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}CSRF - Secure{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🎪 Cross-Site Request Forgery (CSRF)</h1>
+    <p class="subtitle">Phiên bản an toàn với CSRF Token</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('csrf_demo.vulnerable') }}" class="tab-link vulnerable">🔓 Vulnerable</a>
+    <a href="{{ url_for('csrf_demo.secure') }}" class="tab-link secure active">🔒 Secure</a>
+</div>
+
+<div class="demo-container">
+    <div>
+        <div class="balance-display">
+            <div>
+                <div class="balance-label">Số dư tài khoản</div>
+                <div class="balance-amount">${{ "%.2f"|format(balance) }}</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">💸 Chuyển tiền</span>
+                <span class="secure-badge">CSRF TOKEN ✓</span>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="{{ url_for('csrf_demo.secure_transfer') }}">
+                    <!-- CSRF Token included -->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <label class="form-label" for="to-user">Người nhận</label>
+                        <input type="text" id="to-user" name="to_username" class="form-input" placeholder="Username người nhận" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="amount">Số tiền ($)</label>
+                        <input type="number" id="amount" name="amount" class="form-input" placeholder="100" min="1" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">🔒 Chuyển tiền (CSRF Protected)</button>
+                </form>
+            </div>
+        </div>
+
+        {% if transfers %}
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📜 Lịch sử giao dịch</span>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="transfers-table">
+                    <thead>
+                        <tr>
+                            <th>Người nhận</th>
+                            <th>Số tiền</th>
+                            <th>Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transfers %}
+                        <tr>
+                            <td>{{ t.to_username }}</td>
+                            <td>${{ "%.2f"|format(t.amount) }}</td>
+                            <td>{{ t.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <div class="explanation">
+            <h3>🛡️ Cách phòng chống</h3>
+            <ul>
+                <li><strong>CSRF Token:</strong> Token unique cho mỗi session, gửi kèm form</li>
+                <li><strong>SameSite Cookie:</strong> <code>SameSite=Lax</code> hoặc <code>Strict</code></li>
+                <li><strong>Referer/Origin Check:</strong> Verify request đến từ domain của mình</li>
+                <li><strong>Double Submit Cookie:</strong> So sánh cookie vs form value</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Secure Code</span>
+                <span>HTML + Python</span>
+            </div>
+            <div class="code-content"><span class="comment">&lt;!-- ✅ CSRF Token trong form --&gt;</span>
+&lt;input type=<span class="string">"hidden"</span> name=<span class="string">"csrf_token"</span>
+       value=<span class="keyword">"{{ "{{ csrf_token() }}" }}"</span>&gt;
+
+<span class="comment"># ✅ Flask-WTF auto-validate</span>
+<span class="comment"># Server tự kiểm tra token với mỗi POST request</span>
+<span class="keyword">from</span> flask_wtf.csrf <span class="keyword">import</span> CSRFProtect
+csrf = CSRFProtect(app)</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

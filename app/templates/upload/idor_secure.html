@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}IDOR - Profile (Secure){% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🔑 IDOR — My Profile (Secure)</h1>
+    <p class="subtitle">Chỉ xem được profile của chính mình</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('upload.vulnerable') }}" class="tab-link vulnerable">🔓 Vulnerable</a>
+    <a href="{{ url_for('upload.secure') }}" class="tab-link secure active">🔒 Secure</a>
+</div>
+
+<div class="demo-container">
+    <div>
+        <div class="profile-card">
+            <h2>👤 {{ profile.username }} <span class="secure-badge">AUTHORIZED ✓</span></h2>
+            <div class="profile-field">
+                <span class="label">ID</span>
+                <span class="value">{{ profile.id }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Username</span>
+                <span class="value">{{ profile.username }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Email</span>
+                <span class="value">{{ profile.email }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Role</span>
+                <span class="value">{{ profile.role }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Bio</span>
+                <span class="value">{{ profile.bio or 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Phone</span>
+                <span class="value">{{ profile.phone or 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Address</span>
+                <span class="value">{{ profile.address or 'N/A' }}</span>
+            </div>
+            <!-- SSN is NOT shown in secure version -->
+        </div>
+    </div>
+
+    <div>
+        <div class="explanation">
+            <h3>🛡️ Những gì đã được bảo vệ</h3>
+            <ul>
+                <li><strong>Authentication:</strong> Phải đăng nhập mới xem được</li>
+                <li><strong>Authorization:</strong> <code>current_user.id == user_id</code></li>
+                <li><strong>Admin override:</strong> Chỉ admin xem tất cả profiles</li>
+                <li><strong>Data minimization:</strong> SSN không được trả về</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

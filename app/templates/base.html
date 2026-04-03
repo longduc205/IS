@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VulnLab - Nền tảng demo lỗ hổng bảo mật web application">
+    <title>{% block title %}VulnLab{% endblock %} | Web Security Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('main.index') }}" class="navbar-brand">
+            <span class="logo-icon">🛡️</span>
+            <span>VulnLab</span>
+        </a>
+
+        <ul class="navbar-nav">
+            <li><a href="{{ url_for('sqli.vulnerable') }}">💉 SQLi</a></li>
+            <li><a href="{{ url_for('xss.vulnerable') }}">🎭 XSS</a></li>
+            <li><a href="{{ url_for('csrf_demo.vulnerable') }}">🎪 CSRF</a></li>
+            <li><a href="{{ url_for('upload.vulnerable') }}">📁 Upload/IDOR</a></li>
+        </ul>
+
+        <div class="navbar-actions">
+            {% if current_user.is_authenticated %}
+                <div class="user-badge">
+                    <div class="avatar">{{ current_user.username[0]|upper }}</div>
+                    {{ current_user.username }}
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-sm">Đăng xuất</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-sm">Đăng nhập</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Đăng ký</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {% if category == 'error' %}⛔{% elif category == 'success' %}✅{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

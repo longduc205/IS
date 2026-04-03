@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}XSS - Vulnerable{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🎭 Cross-Site Scripting (XSS)</h1>
+    <p class="subtitle">Chèn JavaScript độc hại vào trang web</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
+    <a href="{{ url_for('xss.secure') }}" class="tab-link secure">🔒 Secure</a>
+</div>
+
+<div class="warning-banner">
+    <span class="icon">⚠️</span>
+    <span>Endpoint này render HTML trực tiếp từ user input — <strong>Stored XSS</strong> có thể xảy ra!</span>
+</div>
+
+{% if search %}
+<div class="panel" style="margin-bottom: 1.5rem;">
+    <div class="panel-header">
+        <span class="panel-title">🔍 Reflected XSS Demo</span>
+        <span class="vuln-badge">VULNERABLE</span>
+    </div>
+    <div class="panel-body">
+        <p>Kết quả tìm kiếm cho: {{ search | safe }}</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="demo-container">
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📝 Đăng bài viết (Stored XSS)</span>
+                <span class="vuln-badge">VULNERABLE</span>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="{{ url_for('xss.vulnerable') }}">
+                    <div class="form-group">
+                        <label class="form-label" for="title-input">Tiêu đề</label>
+                        <input type="text" id="title-input" name="title" class="form-input" placeholder="Tiêu đề bài viết">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="content-input">Nội dung</label>
+                        <textarea id="content-input" name="content" class="form-textarea mono" placeholder="Nhập nội dung hoặc XSS payload..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">📤 Đăng bài (Không sanitize)</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Posts list — renders raw HTML intentionally -->
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📋 Bài viết gần đây</span>
+            </div>
+            <div class="panel-body">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post-card">
+                        <div class="post-header">
+                            <span class="post-author">{{ post.username }}</span>
+                            <span>• {{ post.created_at }}</span>
+                        </div>
+                        <div class="post-title">{{ post.title | safe }}</div>
+                        <div class="post-content">{{ post.content | safe }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>Chưa có bài viết nào</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🎯 Payload gợi ý</span>
+            </div>
+            <div class="panel-body">
+                <div class="payloads-list">
+                    {% for payload in payloads %}
+                    <div class="payload-item" data-payload="{{ payload.value }}" data-target="content-input">
+                        <span class="payload-name">{{ payload.name }}</span>
+                        <span class="payload-desc">{{ payload.description }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>📖 Tại sao bị lỗi?</h3>
+            <ul>
+                <li><strong>Stored XSS:</strong> Input lưu vào DB, render lại cho mọi user</li>
+                <li><strong>Reflected XSS:</strong> Input trong URL phản hồi trực tiếp trên page</li>
+                <li>Sử dụng <code>| safe</code> trong Jinja2 → không escape HTML</li>
+                <li><strong>Hậu quả:</strong> Đánh cắp cookie, session hijacking, phishing</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Vulnerable Code</span>
+                <span>Jinja2</span>
+            </div>
+            <div class="code-content"><span class="comment">&lt;!-- ❌ VULNERABLE: Render raw HTML --&gt;</span>
+<span class="danger">{{ "{{ post.content | safe }}" }}</span>
+
+<span class="comment"># Python: Lưu trực tiếp không sanitize</span>
+cursor.execute(<span class="string">"INSERT INTO posts ... VALUES (%s, %s)"</span>,
+    (title, content))  <span class="comment"># raw input!</span></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}XSS - Secure{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🎭 Cross-Site Scripting (XSS)</h1>
+    <p class="subtitle">Phiên bản an toàn với HTML sanitization + CSP headers</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable">🔓 Vulnerable</a>
+    <a href="{{ url_for('xss.secure') }}" class="tab-link secure active">🔒 Secure</a>
+</div>
+
+{% if search %}
+<div class="panel" style="margin-bottom: 1.5rem;">
+    <div class="panel-header">
+        <span class="panel-title">🔍 Reflected XSS Demo (Sanitized)</span>
+        <span class="secure-badge">SECURE ✓</span>
+    </div>
+    <div class="panel-body">
+        <p>Kết quả tìm kiếm cho: {{ search }}</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="demo-container">
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📝 Đăng bài viết (Sanitized)</span>
+                <span class="secure-badge">SECURE ✓</span>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="{{ url_for('xss.secure') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <label class="form-label" for="title-input">Tiêu đề</label>
+                        <input type="text" id="title-input" name="title" class="form-input" placeholder="Tiêu đề bài viết">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="content-input">Nội dung</label>
+                        <textarea id="content-input" name="content" class="form-textarea mono" placeholder="Thử XSS payload — sẽ bị sanitize!"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">📤 Đăng bài (Sanitized)</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 1.5rem;">
+            <div class="panel-header">
+                <span class="panel-title">📋 Bài viết gần đây</span>
+            </div>
+            <div class="panel-body">
+                {% if posts %}
+                    {% for post in posts %}
+                    <div class="post-card">
+                        <div class="post-header">
+                            <span class="post-author">{{ post.username }}</span>
+                            <span>• {{ post.created_at }}</span>
+                        </div>
+                        <div class="post-title">{{ post.title }}</div>
+                        <div class="post-content">{{ post.content }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>Chưa có bài viết nào</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🎯 Thử lại các payload</span>
+            </div>
+            <div class="panel-body">
+                <div class="payloads-list">
+                    {% for payload in payloads %}
+                    <div class="payload-item" data-payload="{{ payload.value }}" data-target="content-input">
+                        <span class="payload-name">{{ payload.name }}</span>
+                        <span class="payload-desc">{{ payload.description }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>🛡️ Cách phòng chống</h3>
+            <ul>
+                <li><strong>Escape HTML:</strong> Jinja2 auto-escape (không dùng <code>| safe</code>)</li>
+                <li><strong>Sanitize:</strong> <code>bleach.clean()</code> loại bỏ HTML tags</li>
+                <li><strong>CSP Header:</strong> <code>Content-Security-Policy: script-src 'self'</code></li>
+                <li><strong>HttpOnly Cookie:</strong> JavaScript không đọc được cookie</li>
+                <li><strong>X-XSS-Protection:</strong> Browser built-in filter</li>
+            </ul>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <div class="code-header">
+                <span>Secure Code</span>
+                <span>Python + Jinja2</span>
+            </div>
+            <div class="code-content"><span class="comment"># ✅ SECURE: Sanitize with bleach</span>
+<span class="keyword">import</span> bleach
+clean_content = bleach.clean(content)
+
+<span class="comment">&lt;!-- ✅ Jinja2 auto-escape (no | safe) --&gt;</span>
+{{ "{{ post.content }}" }}
+
+<span class="comment"># ✅ CSP Header</span>
+resp.headers[<span class="string">"Content-Security-Policy"</span>] = <span class="string">"script-src 'self'"</span></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

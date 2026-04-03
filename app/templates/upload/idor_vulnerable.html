@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}IDOR - Profile #{{ user_id }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🔑 IDOR — Profile User #{{ user_id }}</h1>
+    <p class="subtitle">Truy cập trái phép thông tin user — không có kiểm tra quyền!</p>
+</div>
+
+<div class="tabs">
+    <a href="{{ url_for('upload.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
+    <a href="{{ url_for('upload.secure') }}" class="tab-link secure">🔒 Secure</a>
+</div>
+
+<div class="warning-banner">
+    <span class="icon">⚠️</span>
+    <span>Bạn đang xem profile User #{{ user_id }} <strong>mà không cần đăng nhập</strong>! Thử thay đổi ID trong URL.</span>
+</div>
+
+<div class="demo-container">
+    <div>
+        <div class="profile-card">
+            <h2>👤 {{ profile.username }}</h2>
+            <div class="profile-field">
+                <span class="label">ID</span>
+                <span class="value">{{ profile.id }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Username</span>
+                <span class="value">{{ profile.username }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Email</span>
+                <span class="value">{{ profile.email }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Role</span>
+                <span class="value">{{ profile.role }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Balance</span>
+                <span class="value sensitive">${{ "%.2f"|format(profile.balance) }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Bio</span>
+                <span class="value">{{ profile.bio or 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Phone</span>
+                <span class="value sensitive">{{ profile.phone or 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">Address</span>
+                <span class="value sensitive">{{ profile.address or 'N/A' }}</span>
+            </div>
+            <div class="profile-field">
+                <span class="label">SSN</span>
+                <span class="value sensitive">{{ profile.ssn or 'N/A' }} ⚠️</span>
+            </div>
+        </div>
+
+        <div class="idor-nav" style="margin-top: 1.5rem;">
+            {% for i in range(1, 6) %}
+            <a href="{{ url_for('upload.vulnerable_profile', user_id=i) }}" class="{{ 'active' if i == user_id }}">User #{{ i }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <div class="explanation">
+            <h3>📖 Tại sao bị lỗi?</h3>
+            <ul>
+                <li><strong>Không authentication:</strong> Ai cũng truy cập được</li>
+                <li><strong>Không authorization:</strong> Không check "user này có quyền xem không?"</li>
+                <li><strong>Predictable ID:</strong> Dùng sequential integer (1, 2, 3...)</li>
+                <li><strong>Sensitive data exposed:</strong> SSN, phone, address hiển thị hết</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
