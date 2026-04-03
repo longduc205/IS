@@ -50,7 +50,9 @@
 }
 
 /* --- Reset & Base --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -151,10 +153,134 @@ a:hover {
     transition: all var(--transition-fast);
 }
 
-.navbar-nav a:hover,
-.navbar-nav a.active {
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.375rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-default);
+    width: fit-content;
+}
+
+.tab-link {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.tab-link .nav-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+}
+
+.tab-link:hover {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.tab-link.vulnerable.active {
+    background: var(--accent-red-glow);
+    color: var(--accent-red);
+    border-color: rgba(255, 71, 87, 0.2);
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.05);
+}
+
+.tab-link.vulnerable.active .nav-icon {
+    filter: brightness(0) saturate(100%) invert(43%) sepia(91%) saturate(3025%) hue-rotate(336deg) brightness(101%) contrast(101%);
+    opacity: 1;
+}
+
+.tab-link.secure.active {
+    background: var(--accent-green-glow);
+    color: var(--accent-green);
+    border-color: rgba(46, 213, 115, 0.2);
+    box-shadow: 0 0 20px rgba(46, 213, 115, 0.05);
+}
+
+.tab-link.secure.active .nav-icon {
+    filter: brightness(0) saturate(100%) invert(67%) sepia(91%) saturate(394%) hue-rotate(101deg) brightness(94%) contrast(89%);
+    opacity: 1;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(996%) hue-rotate(201deg) brightness(89%) contrast(85%); /* --text-secondary */
+    transition: all var(--transition-fast);
+}
+
+.navbar-nav a:hover .nav-icon,
+.navbar-nav a.active .nav-icon {
+    filter: brightness(0) saturate(100%) invert(94%) sepia(0%) saturate(22%) hue-rotate(248deg) brightness(105%) contrast(88%); /* --text-primary */
+}
+
+.logo-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(43%) sepia(91%) saturate(3025%) hue-rotate(336deg) brightness(101%) contrast(101%); /* --accent-redish */
+}
+
+/* Specific icon positions */
+.warning-banner .nav-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(43%) sepia(91%) saturate(3025%) hue-rotate(336deg) brightness(101%) contrast(101%); /* --accent-red */
+}
+
+.section-title .nav-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(35%) saturate(5451%) hue-rotate(215deg) brightness(101%) contrast(93%); /* --accent-blue */
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.accounts-info .nav-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(35%) saturate(5451%) hue-rotate(215deg) brightness(101%) contrast(93%); /* --accent-blue */
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.card-icon {
+    width: 32px;
+    height: 32px;
+    /* Card icon colors often determined by attack type, handled by card accent */
+    filter: brightness(0) saturate(100%) invert(94%) sepia(0%) saturate(22%) hue-rotate(248deg) brightness(105%) contrast(88%);
+}
+
+.auth-card h1 .nav-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) saturate(100%) invert(48%) sepia(35%) saturate(5451%) hue-rotate(215deg) brightness(101%) contrast(93%); /* --accent-blue */
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.flash-message .nav-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.flash-message.success .nav-icon {
+    filter: brightness(0) saturate(100%) invert(67%) sepia(91%) saturate(394%) hue-rotate(101deg) brightness(94%) contrast(89%); /* --accent-green */
+}
+
+.flash-message.error .nav-icon {
+    filter: brightness(0) saturate(100%) invert(43%) sepia(91%) saturate(3025%) hue-rotate(336deg) brightness(101%) contrast(101%); /* --accent-red */
 }
 
 .navbar-actions {
@@ -396,10 +522,18 @@ a:hover {
 }
 
 .page-header h1 {
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.page-header h1 .nav-icon {
+    width: 32px;
+    height: 32px;
 }
 
 .page-header .subtitle {
@@ -435,10 +569,6 @@ a:hover {
 
 .tab-link:hover {
     color: var(--text-primary);
-}
-
-.tab-link.vulnerable {
-    /* Default state */
 }
 
 .tab-link.vulnerable.active {
@@ -791,6 +921,7 @@ a:hover {
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;

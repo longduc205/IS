@@ -3,17 +3,21 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>🔑 IDOR — Profile User #{{ user_id }}</h1>
+    <h1><img src="{{ url_for('static', filename='icons/fingerprint-pattern.svg') }}" class="nav-icon"> IDOR — Profile User #{{ user_id }}</h1>
     <p class="subtitle">Truy cập trái phép thông tin user — không có kiểm tra quyền!</p>
 </div>
 
 <div class="tabs">
-    <a href="{{ url_for('upload.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
-    <a href="{{ url_for('upload.secure') }}" class="tab-link secure">🔒 Secure</a>
+    <a href="{{ url_for('upload.vulnerable') }}" class="tab-link vulnerable active">
+        <img src="{{ url_for('static', filename='icons/octagon-alert.svg') }}" class="nav-icon"> Vulnerable
+    </a>
+    <a href="{{ url_for('upload.secure') }}" class="tab-link secure">
+        <img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Secure
+    </a>
 </div>
 
 <div class="warning-banner">
-    <span class="icon">⚠️</span>
+    <img src="{{ url_for('static', filename='icons/triangle-alert.svg') }}" class="nav-icon">
     <span>Bạn đang xem profile User #{{ user_id }} <strong>mà không cần đăng nhập</strong>! Thử thay đổi ID trong URL.</span>
 </div>
 

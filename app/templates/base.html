@@ -10,15 +10,15 @@
 <body>
     <nav class="navbar">
         <a href="{{ url_for('main.index') }}" class="navbar-brand">
-            <span class="logo-icon">🛡️</span>
+            <img src="{{ url_for('static', filename='icons/house.svg') }}" class="logo-icon" alt="Home">
             <span>VulnLab</span>
         </a>
 
         <ul class="navbar-nav">
-            <li><a href="{{ url_for('sqli.vulnerable') }}">💉 SQLi</a></li>
-            <li><a href="{{ url_for('xss.vulnerable') }}">🎭 XSS</a></li>
-            <li><a href="{{ url_for('csrf_demo.vulnerable') }}">🎪 CSRF</a></li>
-            <li><a href="{{ url_for('upload.vulnerable') }}">📁 Upload/IDOR</a></li>
+            <li><a href="{{ url_for('sqli.vulnerable') }}"><img src="{{ url_for('static', filename='icons/database-zap.svg') }}" class="nav-icon" alt="SQLi"> SQLi</a></li>
+            <li><a href="{{ url_for('xss.vulnerable') }}"><img src="{{ url_for('static', filename='icons/terminal.svg') }}" class="nav-icon" alt="XSS"> XSS</a></li>
+            <li><a href="{{ url_for('csrf_demo.vulnerable') }}"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon" alt="CSRF"> CSRF</a></li>
+            <li><a href="{{ url_for('upload.vulnerable') }}"><img src="{{ url_for('static', filename='icons/fingerprint-pattern.svg') }}" class="nav-icon" alt="Upload"> Upload/IDOR</a></li>
         </ul>
 
         <div class="navbar-actions">
@@ -40,7 +40,7 @@
             <div class="flash-container">
                 {% for category, message in messages %}
                     <div class="flash-message {{ category }}">
-                        {% if category == 'error' %}⛔{% elif category == 'success' %}✅{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+                        {% if category == 'error' %}<img src="{{ url_for('static', filename='icons/fingerprint-pattern.svg') }}" class="nav-icon">{% elif category == 'success' %}<img src="{{ url_for('static', filename='icons/house.svg') }}" class="nav-icon">{% endif %}
                         {{ message }}
                     </div>
                 {% endfor %}

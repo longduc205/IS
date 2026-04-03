@@ -3,13 +3,17 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>🎪 Cross-Site Request Forgery (CSRF)</h1>
+    <h1><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon"> Cross-Site Request Forgery (CSRF)</h1>
     <p class="subtitle">Phiên bản an toàn với CSRF Token</p>
 </div>
 
 <div class="tabs">
-    <a href="{{ url_for('csrf_demo.vulnerable') }}" class="tab-link vulnerable">🔓 Vulnerable</a>
-    <a href="{{ url_for('csrf_demo.secure') }}" class="tab-link secure active">🔒 Secure</a>
+    <a href="{{ url_for('csrf_demo.vulnerable') }}" class="tab-link vulnerable">
+        <img src="{{ url_for('static', filename='icons/octagon-alert.svg') }}" class="nav-icon"> Vulnerable
+    </a>
+    <a href="{{ url_for('csrf_demo.secure') }}" class="tab-link secure active">
+        <img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Secure
+    </a>
 </div>
 
 <div class="demo-container">

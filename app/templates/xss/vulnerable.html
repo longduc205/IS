@@ -3,17 +3,21 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>🎭 Cross-Site Scripting (XSS)</h1>
+    <h1><img src="{{ url_for('static', filename='icons/terminal.svg') }}" class="nav-icon"> Cross-Site Scripting (XSS)</h1>
     <p class="subtitle">Chèn JavaScript độc hại vào trang web</p>
 </div>
 
 <div class="tabs">
-    <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable active">🔓 Vulnerable</a>
-    <a href="{{ url_for('xss.secure') }}" class="tab-link secure">🔒 Secure</a>
+    <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable active">
+        <img src="{{ url_for('static', filename='icons/octagon-alert.svg') }}" class="nav-icon"> Vulnerable
+    </a>
+    <a href="{{ url_for('xss.secure') }}" class="tab-link secure">
+        <img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Secure
+    </a>
 </div>
 
 <div class="warning-banner">
-    <span class="icon">⚠️</span>
+    <img src="{{ url_for('static', filename='icons/triangle-alert.svg') }}" class="nav-icon">
     <span>Endpoint này render HTML trực tiếp từ user input — <strong>Stored XSS</strong> có thể xảy ra!</span>
 </div>
 

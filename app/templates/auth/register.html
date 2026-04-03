@@ -4,7 +4,7 @@
 {% block content %}
 <div class="auth-container">
     <div class="auth-card">
-        <h1>📝 Đăng ký</h1>
+        <h1><img src="{{ url_for('static', filename='icons/user-plus.svg') }}" class="nav-icon"> Đăng ký</h1>
         <p class="auth-subtitle">Tạo tài khoản mới để bắt đầu</p>
 
         <form method="POST" action="{{ url_for('auth.register') }}">

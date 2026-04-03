@@ -30,20 +30,20 @@
 </section>
 
 <div class="warning-banner">
-    <span class="icon">⚠️</span>
+    <img src="{{ url_for('static', filename='icons/triangle-alert.svg') }}" class="nav-icon">
     <span>
         <strong>Cảnh báo:</strong> Dự án này chứa code có chủ đích vulnerable. Chỉ sử dụng cho mục đích giáo dục.
         KHÔNG triển khai trên môi trường production.
     </span>
 </div>
 
-<h2 class="section-title">🎯 Các loại tấn công</h2>
+<h2 class="section-title"><img src="{{ url_for('static', filename='icons/layout-dashboard.svg') }}" class="nav-icon"> Các loại tấn công</h2>
 
 <div class="attacks-grid">
     {% for attack in attacks %}
     <a href="{{ attack.url }}" class="attack-card" style="--card-accent: {{ attack.color }}">
         <div class="card-header">
-            <span class="card-icon">{{ attack.icon }}</span>
+            <img src="{{ url_for('static', filename='icons/' + attack.icon) }}" class="card-icon" alt="{{ attack.name }}">
             <span class="severity-badge severity-{{ 'critical' if attack.severity == 'Critical' else 'high' }}">
                 {{ attack.severity }}
             </span>
@@ -58,7 +58,7 @@
 </div>
 
 <div class="accounts-info">
-    <h4>📋 Tài khoản demo có sẵn</h4>
+    <h4><img src="{{ url_for('static', filename='icons/database.svg') }}" class="nav-icon"> Tài khoản demo có sẵn</h4>
     <table>
         <tr><td>admin / admin123</td><td>— Admin (balance: $5000)</td></tr>
         <tr><td>alice / alice123</td><td>— User (balance: $1000)</td></tr>
