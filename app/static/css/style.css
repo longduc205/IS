@@ -7,12 +7,14 @@
 
 /* --- CSS Variables --- */
 :root {
+    /* --- Dark Mode (Default) --- */
     --bg-primary: #06060b;
     --bg-secondary: #0e0e18;
     --bg-card: rgba(18, 18, 30, 0.7);
     --bg-card-hover: rgba(24, 24, 42, 0.85);
     --bg-input: rgba(12, 12, 22, 0.8);
     --bg-code: rgba(8, 8, 16, 0.9);
+    --navbar-bg: rgba(6, 6, 11, 0.85);
 
     --border-default: rgba(255, 255, 255, 0.06);
     --border-hover: rgba(255, 255, 255, 0.12);
@@ -21,6 +23,10 @@
     --text-secondary: #8888a4;
     --text-muted: #5c5c78;
 
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Common Tokens */
     --accent-red: #ff4757;
     --accent-red-glow: rgba(255, 71, 87, 0.15);
     --accent-green: #2ed573;
@@ -32,8 +38,6 @@
     --accent-purple: #a855f7;
     --accent-purple-glow: rgba(168, 85, 247, 0.15);
 
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 
     --radius-sm: 8px;
@@ -47,6 +51,31 @@
     --transition-fast: 0.15s ease;
     --transition-normal: 0.25s ease;
     --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-card-hover: #fdfdfd;
+    --bg-input: #ffffff;
+    --bg-code: #f1f5f9;
+    --navbar-bg: rgba(248, 250, 252, 0.85);
+
+    --border-default: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(0, 0, 0, 0.15);
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+
+    --accent-red-glow: rgba(255, 71, 87, 0.1);
+    --accent-green-glow: rgba(46, 213, 115, 0.1);
+    --accent-blue-glow: rgba(74, 108, 247, 0.1);
 }
 
 /* --- Reset & Base --- */
@@ -108,7 +137,7 @@ a:hover {
     justify-content: space-between;
     padding: 0 2rem;
     height: 64px;
-    background: rgba(6, 6, 11, 0.85);
+    background: var(--navbar-bg);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-default);
 }
@@ -217,13 +246,36 @@ a:hover {
 .nav-icon {
     width: 20px;
     height: 20px;
-    filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(996%) hue-rotate(201deg) brightness(89%) contrast(85%); /* --text-secondary */
+    filter: var(--icon-filter, brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(996%) hue-rotate(201deg) brightness(89%) contrast(85%)); /* --text-secondary */
     transition: all var(--transition-fast);
+}
+
+[data-theme="light"] .nav-icon {
+    filter: brightness(0) saturate(100%) invert(43%) sepia(18%) saturate(693%) hue-rotate(186deg) brightness(95%) contrast(89%); /* Match light --text-secondary */
+}
+
+[data-theme="light"] .navbar-nav a {
+    color: #475569; /* Slate-600 */
+}
+
+[data-theme="light"] .navbar-nav a:hover,
+[data-theme="light"] .navbar-nav a.active {
+    color: #0f172a; /* Slate-900 */
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .nav-icon {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(16%) saturate(830%) hue-rotate(176deg) brightness(96%) contrast(89%); /* Darker slate icon */
+}
+
+[data-theme="light"] .navbar-nav a:hover .nav-icon,
+[data-theme="light"] .navbar-nav a.active .nav-icon {
+    filter: brightness(0) saturate(100%) invert(9%) sepia(41%) saturate(1637%) hue-rotate(194deg) brightness(93%) contrast(97%); /* Almost black */
 }
 
 .navbar-nav a:hover .nav-icon,
 .navbar-nav a.active .nav-icon {
-    filter: brightness(0) saturate(100%) invert(94%) sepia(0%) saturate(22%) hue-rotate(248deg) brightness(105%) contrast(88%); /* --text-primary */
+    filter: var(--icon-active-filter, brightness(0) saturate(100%) invert(94%) sepia(0%) saturate(22%) hue-rotate(248deg) brightness(105%) contrast(88%)); /* --text-primary */
 }
 
 .logo-icon {
@@ -258,8 +310,25 @@ a:hover {
 .card-icon {
     width: 32px;
     height: 32px;
-    /* Card icon colors often determined by attack type, handled by card accent */
     filter: brightness(0) saturate(100%) invert(94%) sepia(0%) saturate(22%) hue-rotate(248deg) brightness(105%) contrast(88%);
+}
+
+[data-theme="light"] .card-icon {
+    filter: none; /* Show original colorful icons if they have color, or keep fixed */
+}
+
+/* Specific card icon colors for light mode to match accents */
+[data-theme="light"] .attack-card[style*="--card-accent: var(--accent-red)"] .card-icon {
+    filter: brightness(0) saturate(100%) invert(43%) sepia(91%) saturate(3025%) hue-rotate(336deg) brightness(101%) contrast(101%);
+}
+[data-theme="light"] .attack-card[style*="--card-accent: var(--accent-blue)"] .card-icon {
+    filter: brightness(0) saturate(100%) invert(48%) sepia(35%) saturate(5451%) hue-rotate(215deg) brightness(101%) contrast(93%);
+}
+[data-theme="light"] .attack-card[style*="--card-accent: var(--accent-yellow)"] .card-icon {
+    filter: brightness(0) saturate(100%) invert(75%) sepia(98%) saturate(1450%) hue-rotate(1deg) brightness(104%) contrast(101%);
+}
+[data-theme="light"] .attack-card[style*="--card-accent: var(--accent-purple)"] .card-icon {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1917%) hue-rotate(251deg) brightness(102%) contrast(91%);
 }
 
 .auth-card h1 .nav-icon {

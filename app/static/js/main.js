@@ -1,8 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     initFlashMessages();
     initPayloadButtons();
     initUploadZone();
 });
+
+/** Theme Switcher (Dark/Light Mode) */
+function initTheme() {
+    const themeBtn = document.getElementById('theme-toggle');
+    if (!themeBtn) return;
+
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon(currentTheme);
+
+    themeBtn.addEventListener('click', () => {
+        let theme = document.documentElement.getAttribute('data-theme');
+        let newTheme = theme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+}
+
+function updateThemeIcon(theme) {
+    const icon = document.querySelector('#theme-toggle img');
+    if (icon) {
+        icon.src = `/static/icons/${theme === 'dark' ? 'sun' : 'moon'}.svg`;
+    }
+}
 
 /** Auto-dismiss flash messages after 5 seconds */
 function initFlashMessages() {

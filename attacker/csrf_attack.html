@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>🎁 Bạn đã trúng thưởng!</title>
@@ -14,15 +15,30 @@
             min-height: 100vh;
             margin: 0;
         }
+
         .container {
             text-align: center;
             padding: 2rem;
         }
-        h1 { font-size: 3rem; margin-bottom: 1rem; }
-        p { font-size: 1.25rem; opacity: 0.9; }
-        .small { font-size: 0.75rem; opacity: 0.5; margin-top: 2rem; }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .small {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            margin-top: 2rem;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🎉 Chúc mừng bạn!</h1>
@@ -43,9 +59,10 @@
 
     <script>
         // Auto-submit after 2 seconds for dramatic effect
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('csrf-form').submit();
         }, 2000);
     </script>
 </body>
+
 </html>

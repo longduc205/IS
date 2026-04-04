@@ -60,10 +60,12 @@
 <div class="accounts-info">
     <h4><img src="{{ url_for('static', filename='icons/database.svg') }}" class="nav-icon"> Tài khoản demo có sẵn</h4>
     <table>
-        <tr><td>admin / admin123</td><td>— Admin (balance: $5000)</td></tr>
-        <tr><td>alice / alice123</td><td>— User (balance: $1000)</td></tr>
-        <tr><td>bob / bob123</td><td>— User (balance: $2500)</td></tr>
-        <tr><td>charlie / charlie123</td><td>— User (balance: $800)</td></tr>
+        {% for user in demo_users %}
+        <tr>
+            <td><span class="mono" style="color: var(--accent-yellow);">{{ user.username }} / {{ user.password }}</span></td>
+            <td>— {{ user.role|capitalize }} (balance: ${{ user.balance|int }})</td>
+        </tr>
+        {% endfor %}
     </table>
 </div>
 {% endblock %}

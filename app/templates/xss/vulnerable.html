@@ -7,13 +7,21 @@
     <p class="subtitle">Chèn JavaScript độc hại vào trang web</p>
 </div>
 
-<div class="tabs">
-    <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable active">
-        <img src="{{ url_for('static', filename='icons/octagon-alert.svg') }}" class="nav-icon"> Vulnerable
-    </a>
-    <a href="{{ url_for('xss.secure') }}" class="tab-link secure">
-        <img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Secure
-    </a>
+<div class="tabs-container" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="tabs" style="margin-bottom: 0;">
+        <a href="{{ url_for('xss.vulnerable') }}" class="tab-link vulnerable active">
+            <img src="{{ url_for('static', filename='icons/octagon-alert.svg') }}" class="nav-icon"> Vulnerable
+        </a>
+        <a href="{{ url_for('xss.secure') }}" class="tab-link secure">
+            <img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Secure
+        </a>
+    </div>
+    <form action="{{ url_for('xss.reset') }}" method="POST" style="margin: 0;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-secondary btn-sm" title="Xóa tất cả bài viết và reset môi trường">
+            <img src="{{ url_for('static', filename='icons/rotate-ccw.svg') }}" class="nav-icon"> Làm mới môi trường
+        </button>
+    </form>
 </div>
 
 <div class="warning-banner">

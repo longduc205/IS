@@ -1,10 +1,29 @@
 from flask import Blueprint, render_template
+from app.config import get_db_connection
 
 main_bp = Blueprint("main", __name__)
 
 
 @main_bp.route("/")
 def index():
+    conn = get_db_connection()
+    demo_users = []
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT username, balance, role FROM users LIMIT 5")
+            demo_users = cursor.fetchall()
+            # Map password for display (hardcoded for demo simplicity since we use seed passwords)
+            passwords = {
+                "admin": "admin123",
+                "alice": "alice123",
+                "bob": "bob123",
+                "charlie": "charlie123",
+                "attacker": "hack3r"
+            }
+            for user in demo_users:
+                user['password'] = passwords.get(user['username'], "******")
+    finally:
+        conn.close()
     attacks = [
         {
             "name": "SQL Injection",
@@ -39,4 +58,4 @@ def index():
             "color": "#ff4757",
         },
     ]
-    return render_template("index.html", attacks=attacks)
+    return render_template("index.html", attacks=attacks, demo_users=demo_users)

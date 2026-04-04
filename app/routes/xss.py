@@ -1,7 +1,8 @@
 import bleach
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from app.config import get_db_connection
+from app import csrf
 
 xss_bp = Blueprint("xss", __name__)
 
@@ -14,6 +15,7 @@ PAYLOADS = [
 
 
 @xss_bp.route("/vulnerable", methods=["GET", "POST"])
+@csrf.exempt
 def vulnerable():
     conn = get_db_connection()
     posts = []
@@ -97,3 +99,28 @@ def secure():
     resp.headers["X-Content-Type-Options"] = "nosniff"
     resp.headers["X-XSS-Protection"] = "1; mode=block"
     return resp
+
+
+@xss_bp.route("/reset", methods=["POST"])
+def reset():
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            # Delete all posts
+            cursor.execute("DELETE FROM posts")
+
+            # Re-seed default safe posts
+            default_posts = [
+                (1, "Welcome to VulnLab", "This is a demo platform for web security testing."),
+                (2, "My First Post", "Hello everyone! I'm Alice."),
+                (3, "Project Update", "The new feature is ready for review."),
+            ]
+            for user_id, title, content in default_posts:
+                cursor.execute(
+                    "INSERT INTO posts (user_id, title, content) VALUES (%s, %s, %s)",
+                    (user_id, title, content),
+                )
+        flash("Môi trường demo đã được làm sạch!", "success")
+    finally:
+        conn.close()
+    return redirect(url_for("xss.vulnerable"))
