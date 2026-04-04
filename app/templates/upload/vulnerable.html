@@ -26,20 +26,20 @@
         <!-- File Upload -->
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">📤 Upload File</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon"> Upload File</span>
                 <span class="vuln-badge">NO VALIDATION</span>
             </div>
             <div class="panel-body">
                 <form method="POST" action="{{ url_for('upload.vulnerable') }}" enctype="multipart/form-data">
                     <div class="upload-zone">
-                        <div class="upload-icon">📂</div>
+                        <div class="upload-icon"><img src="{{ url_for('static', filename='icons/folder.svg') }}" class="nav-icon" style="width: 48px; height: 48px; opacity: 0.5;"></div>
                         <div class="upload-text">
                             Kéo thả file hoặc click để chọn<br>
                             <small style="color: var(--accent-red);">Chấp nhận MỌI loại file (vulnerable!)</small>
                         </div>
                         <input type="file" name="file" required>
                     </div>
-                    <button type="submit" class="btn btn-danger btn-block" style="margin-top: 1rem;">📤 Upload (No Validation)</button>
+                    <button type="submit" class="btn btn-danger btn-block" style="margin-top: 1rem;"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon" style="filter: brightness(0) invert(1);"> Upload (No Validation)</button>
                 </form>
 
                 {% if uploaded_file_url %}
@@ -53,13 +53,13 @@
         {% if files %}
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📋 Files đã upload</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/clipboard.svg') }}" class="nav-icon"> Files đã upload</span>
             </div>
             <div class="panel-body">
                 <div class="file-list">
                     {% for f in files %}
                     <div class="file-item">
-                        <span class="file-icon">📄</span>
+                        <span class="file-icon"><img src="{{ url_for('static', filename='icons/file.svg') }}" class="nav-icon"></span>
                         <span>{{ f }}</span>
                         <a href="{{ url_for('static', filename='uploads/' + f) }}" target="_blank" class="btn btn-outline btn-sm">Xem</a>
                     </div>
@@ -72,7 +72,7 @@
         <!-- IDOR Demo -->
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">🔑 IDOR Demo</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/fingerprint-pattern.svg') }}" class="nav-icon"> IDOR Demo</span>
                 <span class="vuln-badge">NO AUTH CHECK</span>
             </div>
             <div class="panel-body">
@@ -90,7 +90,7 @@
 
     <div>
         <div class="explanation">
-            <h3>📖 Tại sao bị lỗi?</h3>
+            <h3><img src="{{ url_for('static', filename='icons/book-open.svg') }}" class="nav-icon"> Tại sao bị lỗi?</h3>
             <ul>
                 <li><strong>File Upload:</strong> Không validate extension → upload .php, .html, .py</li>
                 <li><strong>Không rename:</strong> Giữ original filename → path traversal</li>

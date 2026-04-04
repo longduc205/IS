@@ -20,7 +20,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">🔍 Tìm kiếm User</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/search.svg') }}" class="nav-icon"> Tìm kiếm User</span>
                 <span class="secure-badge">SECURE ✓</span>
             </div>
             <div class="panel-body">
@@ -48,7 +48,7 @@
         {% if results %}
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📊 Kết quả ({{ results|length }} rows)</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/layout-dashboard.svg') }}" class="nav-icon"> Kết quả ({{ results|length }} rows)</span>
             </div>
             <div class="panel-body" style="padding: 0;">
                 <table class="results-table">
@@ -73,7 +73,7 @@
         </div>
         {% elif search %}
         <div class="empty-state" style="margin-top: 1.5rem;">
-            <div class="empty-icon">🛡️</div>
+            <div class="empty-icon"><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon" style="width: 48px; height: 48px; opacity: 0.2;"></div>
             <p>Không tìm thấy kết quả — payload đã bị vô hiệu hóa!</p>
         </div>
         {% endif %}
@@ -82,7 +82,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">🎯 Thử lại các payload</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/database.svg') }}" class="nav-icon"> Thử lại các payload</span>
             </div>
             <div class="panel-body">
                 <div class="payloads-list">
@@ -97,7 +97,7 @@
         </div>
 
         <div class="explanation">
-            <h3>🛡️ Cách phòng chống</h3>
+            <h3><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Cách phòng chống</h3>
             <ul>
                 <li><strong>Parameterized Query:</strong> Sử dụng <code>%s</code> placeholder</li>
                 <li><strong>ORM:</strong> SQLAlchemy, Django ORM tự động escape</li>

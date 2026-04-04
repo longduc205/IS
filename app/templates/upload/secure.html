@@ -20,14 +20,14 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">📤 Upload File</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon"> Upload File</span>
                 <span class="secure-badge">VALIDATED ✓</span>
             </div>
             <div class="panel-body">
                 <form method="POST" action="{{ url_for('upload.secure') }}" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="upload-zone">
-                        <div class="upload-icon">🛡️</div>
+                        <div class="upload-icon"><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon" style="width: 48px; height: 48px; opacity: 0.5;"></div>
                         <div class="upload-text">
                             Kéo thả file hoặc click để chọn<br>
                             <small style="color: var(--accent-green);">Chỉ chấp nhận: PNG, JPG, GIF, WebP</small>
@@ -48,13 +48,13 @@
         {% if files %}
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📋 Files đã upload</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/clipboard.svg') }}" class="nav-icon"> Files đã upload</span>
             </div>
             <div class="panel-body">
                 <div class="file-list">
                     {% for f in files %}
                     <div class="file-item">
-                        <span class="file-icon">🖼️</span>
+                        <span class="file-icon"><img src="{{ url_for('static', filename='icons/file.svg') }}" class="nav-icon"></span>
                         <span>{{ f }}</span>
                     </div>
                     {% endfor %}
@@ -65,7 +65,7 @@
 
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">🔑 IDOR Demo (Secure)</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/fingerprint-pattern.svg') }}" class="nav-icon"> IDOR Demo (Secure)</span>
                 <span class="secure-badge">AUTH CHECK ✓</span>
             </div>
             <div class="panel-body">
@@ -83,7 +83,7 @@
 
     <div>
         <div class="explanation">
-            <h3>🛡️ Cách phòng chống</h3>
+            <h3><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Cách phòng chống</h3>
             <ul>
                 <li><strong>Whitelist extensions:</strong> Chỉ cho phép png, jpg, gif, webp</li>
                 <li><strong>Rename file:</strong> UUID random, không giữ original name</li>

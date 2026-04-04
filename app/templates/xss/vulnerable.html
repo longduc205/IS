@@ -24,7 +24,7 @@
 {% if search %}
 <div class="panel" style="margin-bottom: 1.5rem;">
     <div class="panel-header">
-        <span class="panel-title">🔍 Reflected XSS Demo</span>
+        <span class="panel-title"><img src="{{ url_for('static', filename='icons/search.svg') }}" class="nav-icon"> Reflected XSS Demo</span>
         <span class="vuln-badge">VULNERABLE</span>
     </div>
     <div class="panel-body">
@@ -37,7 +37,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">📝 Đăng bài viết (Stored XSS)</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/notebook-text.svg') }}" class="nav-icon"> Đăng bài viết (Stored XSS)</span>
                 <span class="vuln-badge">VULNERABLE</span>
             </div>
             <div class="panel-body">
@@ -50,7 +50,7 @@
                         <label class="form-label" for="content-input">Nội dung</label>
                         <textarea id="content-input" name="content" class="form-textarea mono" placeholder="Nhập nội dung hoặc XSS payload..."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-danger">📤 Đăng bài (Không sanitize)</button>
+                    <button type="submit" class="btn btn-danger"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon" style="filter: brightness(0) invert(1);"> Đăng bài (Không sanitize)</button>
                 </form>
             </div>
         </div>
@@ -58,7 +58,7 @@
         <!-- Posts list — renders raw HTML intentionally -->
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📋 Bài viết gần đây</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/clipboard.svg') }}" class="nav-icon"> Bài viết gần đây</span>
             </div>
             <div class="panel-body">
                 {% if posts %}
@@ -74,7 +74,7 @@
                     {% endfor %}
                 {% else %}
                     <div class="empty-state">
-                        <div class="empty-icon">📝</div>
+                        <div class="empty-icon"><img src="{{ url_for('static', filename='icons/notebook-text.svg') }}" class="nav-icon" style="width: 48px; height: 48px; opacity: 0.2;"></div>
                         <p>Chưa có bài viết nào</p>
                     </div>
                 {% endif %}
@@ -85,7 +85,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">🎯 Payload gợi ý</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/terminal.svg') }}" class="nav-icon"> Payload gợi ý</span>
             </div>
             <div class="panel-body">
                 <div class="payloads-list">
@@ -100,7 +100,7 @@
         </div>
 
         <div class="explanation">
-            <h3>📖 Tại sao bị lỗi?</h3>
+            <h3><img src="{{ url_for('static', filename='icons/book-open.svg') }}" class="nav-icon"> Tại sao bị lỗi?</h3>
             <ul>
                 <li><strong>Stored XSS:</strong> Input lưu vào DB, render lại cho mọi user</li>
                 <li><strong>Reflected XSS:</strong> Input trong URL phản hồi trực tiếp trên page</li>

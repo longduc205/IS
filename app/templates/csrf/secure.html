@@ -27,7 +27,7 @@
 
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">💸 Chuyển tiền</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/landmark.svg') }}" class="nav-icon"> Chuyển tiền</span>
                 <span class="secure-badge">CSRF TOKEN ✓</span>
             </div>
             <div class="panel-body">
@@ -50,7 +50,7 @@
         {% if transfers %}
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📜 Lịch sử giao dịch</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/clipboard.svg') }}" class="nav-icon"> Lịch sử giao dịch</span>
             </div>
             <div class="panel-body" style="padding: 0;">
                 <table class="transfers-table">
@@ -78,7 +78,7 @@
 
     <div>
         <div class="explanation">
-            <h3>🛡️ Cách phòng chống</h3>
+            <h3><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Cách phòng chống</h3>
             <ul>
                 <li><strong>CSRF Token:</strong> Token unique cho mỗi session, gửi kèm form</li>
                 <li><strong>SameSite Cookie:</strong> <code>SameSite=Lax</code> hoặc <code>Strict</code></li>

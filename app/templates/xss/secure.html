@@ -19,7 +19,7 @@
 {% if search %}
 <div class="panel" style="margin-bottom: 1.5rem;">
     <div class="panel-header">
-        <span class="panel-title">🔍 Reflected XSS Demo (Sanitized)</span>
+        <span class="panel-title"><img src="{{ url_for('static', filename='icons/search.svg') }}" class="nav-icon"> Reflected XSS Demo (Sanitized)</span>
         <span class="secure-badge">SECURE ✓</span>
     </div>
     <div class="panel-body">
@@ -32,7 +32,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">📝 Đăng bài viết (Sanitized)</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/notebook-text.svg') }}" class="nav-icon"> Đăng bài viết (Sanitized)</span>
                 <span class="secure-badge">SECURE ✓</span>
             </div>
             <div class="panel-body">
@@ -46,14 +46,14 @@
                         <label class="form-label" for="content-input">Nội dung</label>
                         <textarea id="content-input" name="content" class="form-textarea mono" placeholder="Thử XSS payload — sẽ bị sanitize!"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-success">📤 Đăng bài (Sanitized)</button>
+                    <button type="submit" class="btn btn-success"><img src="{{ url_for('static', filename='icons/send.svg') }}" class="nav-icon" style="filter: brightness(0) invert(1);"> Đăng bài (Sanitized)</button>
                 </form>
             </div>
         </div>
 
         <div class="panel" style="margin-top: 1.5rem;">
             <div class="panel-header">
-                <span class="panel-title">📋 Bài viết gần đây</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/clipboard.svg') }}" class="nav-icon"> Bài viết gần đây</span>
             </div>
             <div class="panel-body">
                 {% if posts %}
@@ -69,7 +69,7 @@
                     {% endfor %}
                 {% else %}
                     <div class="empty-state">
-                        <div class="empty-icon">📝</div>
+                        <div class="empty-icon"><img src="{{ url_for('static', filename='icons/notebook-text.svg') }}" class="nav-icon" style="width: 48px; height: 48px; opacity: 0.2;"></div>
                         <p>Chưa có bài viết nào</p>
                     </div>
                 {% endif %}
@@ -80,7 +80,7 @@
     <div>
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">🎯 Thử lại các payload</span>
+                <span class="panel-title"><img src="{{ url_for('static', filename='icons/terminal.svg') }}" class="nav-icon"> Thử lại các payload</span>
             </div>
             <div class="panel-body">
                 <div class="payloads-list">
@@ -95,7 +95,7 @@
         </div>
 
         <div class="explanation">
-            <h3>🛡️ Cách phòng chống</h3>
+            <h3><img src="{{ url_for('static', filename='icons/shield-check.svg') }}" class="nav-icon"> Cách phòng chống</h3>
             <ul>
                 <li><strong>Escape HTML:</strong> Jinja2 auto-escape (không dùng <code>| safe</code>)</li>
                 <li><strong>Sanitize:</strong> <code>bleach.clean()</code> loại bỏ HTML tags</li>
