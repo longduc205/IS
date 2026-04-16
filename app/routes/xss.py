@@ -106,10 +106,7 @@ def reset():
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
-            # Delete all posts
             cursor.execute("DELETE FROM posts")
-
-            # Re-seed default safe posts
             default_posts = [
                 (1, "Welcome to VulnLab", "This is a demo platform for web security testing."),
                 (2, "My First Post", "Hello everyone! I'm Alice."),
@@ -120,7 +117,33 @@ def reset():
                     "INSERT INTO posts (user_id, title, content) VALUES (%s, %s, %s)",
                     (user_id, title, content),
                 )
-        flash("Môi trường demo đã được làm sạch!", "success")
     finally:
         conn.close()
+    flash("Môi trường demo đã được làm sạch!", "success")
+    return redirect(url_for("xss.vulnerable"))
+
+
+@xss_bp.route("/reset-force", methods=["GET"])
+def reset_force():
+    """
+    Endpoint reset không cần CSRF token.
+    Dùng GET để có thể gọi từ bookmark hoặc khi DOM bị hỏng.
+    """
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("DELETE FROM posts")
+            default_posts = [
+                (1, "Welcome to VulnLab", "This is a demo platform for web security testing."),
+                (2, "My First Post", "Hello everyone! I'm Alice."),
+                (3, "Project Update", "The new feature is ready for review."),
+            ]
+            for user_id, title, content in default_posts:
+                cursor.execute(
+                    "INSERT INTO posts (user_id, title, content) VALUES (%s, %s, %s)",
+                    (user_id, title, content),
+                )
+    finally:
+        conn.close()
+    flash("Môi trường đã được reset!", "success")
     return redirect(url_for("xss.vulnerable"))
